@@ -25,9 +25,14 @@ namespace hackdayproject.Api.Controllers
 
         // GET: api/Songs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Song>>> GetSong()
+        public async Task<ActionResult<IEnumerable<Song>>> GetSong(string searchParameter = "")
         {
-            return await _context.Song.ToListAsync();
+            var songQuery = _context.Song.Select(song => song);
+            if (!String.IsNullOrEmpty(searchParameter))
+            {
+                songQuery = songQuery.Where(song => song.Name.Contains(searchParameter));
+            }
+            return await songQuery.ToListAsync();
         }
 
         // GET: api/Songs/5
@@ -44,35 +49,27 @@ namespace hackdayproject.Api.Controllers
             return song;
         }
 
-        // PUT: api/Songs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSong(Guid id, Song song)
+        public async Task<IActionResult> PutSong(Guid id, [FromForm]UpdateSongRequest songRequest)
         {
-            if (id != song.Id)
-            {
-                return BadRequest();
-            }
+            var existingSong = await _context.Song.FindAsync(id);
+            var picturePath =  await _fileservice.SaveImage(songRequest.Picture);
+            var songPath = await _fileservice.SaveAudio(songRequest.Audio);
 
-            _context.Entry(song).State = EntityState.Modified;
-
-            try
+            if (existingSong != null)
             {
+                existingSong.Name = songRequest.Name;
+                existingSong.ArtistName = songRequest.ArtistName;
+                existingSong.Audio = songPath;
+                existingSong.Picture = picturePath;
+
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!SongExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-
-            return NoContent();
+            return Ok(existingSong);
         }
         
         [HttpPost]

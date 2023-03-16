@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useReducer} from 'react';
-import { PlayerActionTypes, PlayerState } from '../Types/Types';
+import { PlayerState } from '../Types/Types';
 import {Pause, PlayArrow, VolumeUp} from "@mui/icons-material";
 import SongProgress from './SongProgress';
 import './player.css';
@@ -14,8 +14,9 @@ let audio: HTMLAudioElement;
 
 const Player : FC<IPlayerProps> = ({player, setPlayer}) => {
     const {pause, volume, active, duration, currentTime} = player;
-
-    useEffect(() => {
+    
+    useEffect(() => 
+    {   console.log(active, pause);
         if(!audio) {
             audio = new Audio();
         } else {
@@ -50,9 +51,8 @@ const Player : FC<IPlayerProps> = ({player, setPlayer}) => {
 
     const play = () => {
         if (pause) {
-            audio.play();
-        
             setPlayer(prevState => ({ ...prevState, pause: false }))
+            audio.play();
         } else {
             setPlayer(prevState => ({ ...prevState, pause: true }))
             audio.pause();
@@ -71,7 +71,7 @@ const Player : FC<IPlayerProps> = ({player, setPlayer}) => {
     return (
         <div className="player">        
             <div className="player__settings">
-                <button className="player__button" onClick={play}>{pause ? <PlayArrow /> : <Pause/>}</button>
+                <button className="player__button" onClick={play}>{pause ? <Pause/> : <PlayArrow /> }</button>
                 <div className="player__song-headings">
                 <div>{active?.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{active?.artistName}</div>
