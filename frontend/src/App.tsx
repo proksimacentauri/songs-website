@@ -1,34 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
+import './App.css';
+import Songlist from './Components/Songlist';
+import Player from './Components/Player';
+import { PlayerState } from './Types/Types';
+import AddSong from './Components/AddSong';
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [player, setPlayer] = useState<PlayerState>({
+    currentTime: 0,
+    duration: 0,
+    active:  null,
+    volume: 50,
+    pause: true,
+  });
+
+  useEffect(() => {
+    axios.get('http://localhost:5124/api/Songs')
+    .then(resp => console.log(resp));
+  }, []);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <>
+    <header>\
+      <Link to={'/'}>Home</Link>
+      <input type="text" />      
+      <button><Link to={'/AddSong'}>add song</Link></button>
+    </header>
+    <Routes>
+      <Route index element={<Songlist player={player} setPlayer={setPlayer}  />} />
+      <Route path="/Addsong" element={<AddSong />} />
+      <Route path="*" element={<div>page not found</div>} />
+    </Routes>
+    <Player player={player} setPlayer={setPlayer} />
+    </>
   )
 }
 
-export default App
+export default App;

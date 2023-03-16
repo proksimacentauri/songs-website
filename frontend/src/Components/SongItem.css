@@ -1,0 +1,46 @@
+.SongItem {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    border: 1px solid #727a72;
+    border-radius: 6px;
+    align-items: center;
+    padding: 10px;
+}
+
+.SongItem:hover {
+    transition: 200ms ease-in;
+    background: #727a72;
+    border: 1px solid #727a72;
+}
+
+.SongItem__image {
+    height: 80px;
+    width: 80px;
+    padding: 20px;
+    object-fit: contain;
+    
+}
+
+.SongItem__Section {
+    display: flex;
+    flex-direction: column;
+}
+
+.SongItem__artist {
+    margin: 0;
+    color: aliceblue;
+}
+
+.SongItem__song-name {
+    margin: 0;
+    color: aliceblue;
+    font-weight: bold;
+}
+
+.SongItem_titles-container {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
