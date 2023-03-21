@@ -22,6 +22,12 @@
     <PackageReference Include="SpotifyAPI.Web" Version="7.0.0" />
     <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <Content Include="Images\*">
+  <CopyToPublishDirectory>always</CopyToPublishDirectory>
+</Content>
+<Content Include="Audios\*">
+  <CopyToPublishDirectory>always</CopyToPublishDirectory>
+</Content>
   </ItemGroup>
 
 </Project>
