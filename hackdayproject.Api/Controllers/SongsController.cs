@@ -23,7 +23,6 @@ namespace hackdayproject.Api.Controllers
             _fileservice = fileService;
         }
 
-        // GET: api/Songs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Song>>> GetSong(string searchParameter = "")
         {
@@ -35,7 +34,6 @@ namespace hackdayproject.Api.Controllers
             return await songQuery.ToListAsync();
         }
 
-        // GET: api/Songs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Song>> GetSong(Guid id)
         {
@@ -89,7 +87,6 @@ namespace hackdayproject.Api.Controllers
             return CreatedAtAction("GetSong", new { id = song.Id }, song);
         }
 
-        // DELETE: api/Songs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSong(Guid id)
         {

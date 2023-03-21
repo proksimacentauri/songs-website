@@ -5,7 +5,7 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<dbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("dbContext") ?? throw new InvalidOperationException("Connection string 'dbContext' not found.")));
+    options.UseSqlServer("Server=localhost,1433;Database=songsite;User Id=sa;Password=Password_2_Change_4_Real_Cases_&;Encrypt=False;MultipleActiveResultSets=true" ?? throw new InvalidOperationException("Connection string 'dbContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddScoped<IFileService, FileService>();
@@ -20,21 +20,24 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-  app.UseSwagger();
-  app.UseSwaggerUI();
-  app.UseCors(cors => {
-    cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-  });
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseCors(cors =>
+    {
+        cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+    });
 }
 
 app.UseStaticFiles(new StaticFileOptions
 {
-  FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Images")), RequestPath = "/Images"
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Images")),
+    RequestPath = "/Images"
 });
 
 app.UseStaticFiles(new StaticFileOptions
 {
-  FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Audios")), RequestPath = "/Audios"
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Audios")),
+    RequestPath = "/Audios"
 });
 
 app.UseHttpsRedirection();
