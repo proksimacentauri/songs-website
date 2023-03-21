@@ -16,19 +16,17 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+app.UseSwagger();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
+    app.UseSwaggerUI();
+    app.UseCors(cors =>
+    {
+        cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+    });
 }
-
-
-app.UseSwagger();
-app.UseSwaggerUI();
-app.UseCors(cors =>
-{
-    cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-});
 
 app.UseStaticFiles(new StaticFileOptions
 {
