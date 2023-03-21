@@ -5,7 +5,7 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<dbContext>(options =>
-    options.UseSqlServer("Server=localhost,1433;Database=songsite;User Id=sa;Password=Password_2_Change_4_Real_Cases_&;Encrypt=False;MultipleActiveResultSets=true" ?? throw new InvalidOperationException("Connection string 'dbContext' not found.")));
+    options.UseSqlServer(builder.Configuration["sadconnectionstring"] ?? throw new InvalidOperationException("Connection string 'dbContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddScoped<IFileService, FileService>();
