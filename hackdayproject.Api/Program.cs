@@ -4,8 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<dbContext>(options =>
-    options.UseSqlServer(builder.Configuration["sadconnectionstring"] ?? throw new InvalidOperationException("Connection string 'dbContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddScoped<IFileService, FileService>();
@@ -20,12 +18,20 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    builder.Services.AddDbContext<dbContext>(options =>
+    options.UseSqlServer(builder.Configuration["sadconnectionstring"] ?? throw new InvalidOperationException("Connection string 'dbContext' not found.")));
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors(cors =>
     {
         cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
     });
+}
+
+if (app.Environment.IsProduction())
+{
+    builder.Services.AddDbContext<dbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("SQLAZURECONNSTR_sadconnectionstring")));
 }
 
 app.UseStaticFiles(new StaticFileOptions
