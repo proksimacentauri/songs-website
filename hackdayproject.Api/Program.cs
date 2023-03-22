@@ -18,14 +18,15 @@ var app = builder.Build();
 
 
 app.UseSwagger();
+app.UseCors(cors =>
+   {
+       cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+   });
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI();
-    app.UseCors(cors =>
-    {
-        cors.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-    });
+
 }
 
 app.UseStaticFiles(new StaticFileOptions
